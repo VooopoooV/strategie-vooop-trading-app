@@ -4,6 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tableau de Bord du Trader</title>
+    <!-- Mobile App Experience Tags -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Trader Board">
+    
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
@@ -21,11 +26,12 @@
             transform: translateX(-100%);
         }
         .table-container {
-            max-height: calc(100vh - 300px); /* Adjusted for month filter */
+            max-height: calc(100vh - 320px); /* Adjusted for mobile view */
             overflow-y: auto;
         }
         ::-webkit-scrollbar {
             width: 8px;
+            height: 8px;
         }
         ::-webkit-scrollbar-track {
             background: #1f2937;
@@ -63,7 +69,7 @@
 <body class="bg-gray-900 text-gray-200">
     <div class="flex">
         <!-- Sidebar -->
-        <aside id="sidebar" class="sidebar bg-gray-800 text-gray-300 w-64 min-h-screen p-4 fixed lg:relative lg:translate-x-0 transform -translate-x-full lg:block">
+        <aside id="sidebar" class="sidebar bg-gray-800 text-gray-300 w-64 min-h-screen p-4 fixed lg:relative lg:translate-x-0 transform -translate-x-full lg:block z-40">
             <div class="flex items-center justify-between mb-8">
                 <h1 class="text-2xl font-bold text-white">Trader Présent</h1>
                 <button id="close-sidebar" class="lg:hidden text-gray-400 hover:text-white">
@@ -99,17 +105,17 @@
         </aside>
 
         <!-- Main Content -->
-        <main id="main-content" class="main-content flex-1 p-4 lg:p-8 lg:ml-64">
+        <main id="main-content" class="main-content flex-1 p-4 sm:p-6 lg:p-8 lg:ml-64">
              <button id="open-sidebar" class="lg:hidden p-2 bg-gray-800 rounded-md text-white fixed top-4 left-4 z-50">
                 <i class="fas fa-bars text-xl"></i>
             </button>
             
             <div id="dashboard" class="content-section">
-                 <h2 class="text-3xl font-bold mb-6 text-white">Tableau de Bord</h2>
+                 <h2 class="text-2xl sm:text-3xl font-bold mb-6 text-white">Tableau de Bord</h2>
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    <div class="bg-gray-800 p-6 rounded-lg shadow-lg">
-                        <h3 class="font-bold text-xl mb-3 text-cyan-400">Les 5 Vérités du Marché</h3>
-                        <ul class="list-disc list-inside space-y-2 text-gray-300">
+                    <div class="bg-gray-800 p-4 sm:p-6 rounded-lg shadow-lg">
+                        <h3 class="font-bold text-lg sm:text-xl mb-3 text-cyan-400">Les 5 Vérités du Marché</h3>
+                        <ul class="list-disc list-inside space-y-2 text-gray-300 text-sm sm:text-base">
                             <li>Tout peut arriver.</li>
                             <li>Je n’ai pas besoin de savoir ce qui va arriver pour gagner.</li>
                             <li>Les gains et pertes se distribuent de façon aléatoire.</li>
@@ -117,18 +123,18 @@
                             <li>Chaque instant de marché est unique.</li>
                         </ul>
                     </div>
-                    <div class="bg-gray-800 p-6 rounded-lg shadow-lg">
-                        <h3 class="font-bold text-xl mb-3 text-amber-400">Mes Mantras de Trader</h3>
-                        <ul class="list-disc list-inside space-y-2 text-gray-300">
+                    <div class="bg-gray-800 p-4 sm:p-6 rounded-lg shadow-lg">
+                        <h3 class="font-bold text-lg sm:text-xl mb-3 text-amber-400">Mes Mantras de Trader</h3>
+                        <ul class="list-disc list-inside space-y-2 text-gray-300 text-sm sm:text-base">
                             <li>« Mon rôle est d’exécuter mon plan, pas de prédire. »</li>
                             <li>« La sérénité vient de la régularité, pas du résultat d’un trade isolé. »</li>
                             <li>« Je n’ai rien à prouver au marché. »</li>
                             <li>« Je gagne sur la durée, pas dans l’instant. »</li>
                         </ul>
                     </div>
-                    <div class="bg-gray-800 p-6 rounded-lg shadow-lg">
-                        <h3 class="font-bold text-xl mb-3 text-red-400">Limites de Perte (Non Négociable)</h3>
-                        <ul class="list-disc list-inside space-y-2 text-gray-300">
+                    <div class="bg-gray-800 p-4 sm:p-6 rounded-lg shadow-lg">
+                        <h3 class="font-bold text-lg sm:text-xl mb-3 text-red-400">Limites de Perte</h3>
+                        <ul class="list-disc list-inside space-y-2 text-gray-300 text-sm sm:text-base">
                             <li><span class="font-semibold">2%</span> par jour</li>
                             <li><span class="font-semibold">6%</span> par semaine</li>
                             <li><span class="font-semibold">18%</span> par mois</li>
@@ -138,9 +144,9 @@
             </div>
 
             <div id="ia-analysis" class="content-section hidden">
-                <h2 class="text-3xl font-bold mb-6 text-white">Analyse de Marché par IA</h2>
-                <div class="bg-gray-800 p-6 rounded-lg shadow-lg">
-                    <p class="mb-4 text-gray-400">Posez une question sur un actif (ex: "analyse technique pour EUR/USD") ou demandez les dernières nouvelles (ex: "dernières nouvelles sur TSLA").</p>
+                <h2 class="text-2xl sm:text-3xl font-bold mb-6 text-white">Analyse de Marché par IA</h2>
+                <div class="bg-gray-800 p-4 sm:p-6 rounded-lg shadow-lg">
+                    <p class="mb-4 text-gray-400 text-sm sm:text-base">Posez une question sur un actif (ex: "analyse EUR/USD") ou les dernières nouvelles.</p>
                     <div class="flex flex-col sm:flex-row gap-4">
                         <input type="text" id="ia-prompt" class="flex-grow bg-gray-700 text-white border border-gray-600 rounded-lg py-2 px-4 focus:outline-none focus:ring-2 focus:ring-cyan-500" placeholder="Ex: Dernières nouvelles sur le Bitcoin...">
                         <button id="ia-submit" class="bg-cyan-600 hover:bg-cyan-700 text-white font-bold py-2 px-6 rounded-lg transition duration-300 flex items-center justify-center">
@@ -151,33 +157,33 @@
                     <div id="ia-loader" class="hidden mt-6 flex justify-center">
                         <div class="loader"></div>
                     </div>
-                    <div id="ia-response" class="mt-6 p-4 bg-gray-900 rounded-lg whitespace-pre-wrap"></div>
+                    <div id="ia-response" class="mt-6 p-4 bg-gray-900 rounded-lg whitespace-pre-wrap text-sm"></div>
                 </div>
             </div>
 
             <div id="checklist" class="content-section hidden">
-                <h2 class="text-3xl font-bold mb-6 text-white">Check-list d'Entrée en Position</h2>
-                <div class="bg-gray-800 p-6 rounded-lg shadow-lg">
-                    <div class="space-y-4">
+                <h2 class="text-2xl sm:text-3xl font-bold mb-6 text-white">Check-list d'Entrée</h2>
+                <div class="bg-gray-800 p-4 sm:p-6 rounded-lg shadow-lg">
+                    <div class="space-y-3">
                         <label class="flex items-center cursor-pointer">
                             <input type="checkbox" class="form-checkbox h-5 w-5 text-cyan-500 bg-gray-700 border-gray-600 rounded focus:ring-cyan-500">
-                            <span class="ml-3 text-lg">Prix au-dessus de la Moyenne Mobile 150</span>
+                            <span class="ml-3 text-base sm:text-lg">Prix > MM 150</span>
                         </label>
                         <label class="flex items-center cursor-pointer">
                             <input type="checkbox" class="form-checkbox h-5 w-5 text-cyan-500 bg-gray-700 border-gray-600 rounded focus:ring-cyan-500">
-                            <span class="ml-3 text-lg">Clôture d’une bougie M30 au-dessus de la zone de résistance</span>
+                            <span class="ml-3 text-base sm:text-lg">Clôture M30 > Résistance</span>
                         </label>
                         <label class="flex items-center cursor-pointer">
                             <input type="checkbox" class="form-checkbox h-5 w-5 text-cyan-500 bg-gray-700 border-gray-600 rounded focus:ring-cyan-500">
-                            <span class="ml-3 text-lg">Stop Loss placé sous la MM100 et sous la zone de résistance</span>
+                            <span class="ml-3 text-base sm:text-lg">SL sous MM100 & Résistance</span>
                         </label>
                          <label class="flex items-center cursor-pointer">
                             <input type="checkbox" class="form-checkbox h-5 w-5 text-cyan-500 bg-gray-700 border-gray-600 rounded focus:ring-cyan-500">
-                            <span class="ml-3 text-lg">Risque par trade < 2% maximum</span>
+                            <span class="ml-3 text-base sm:text-lg">Risque par trade < 2%</span>
                         </label>
                         <label class="flex items-center cursor-pointer">
                             <input type="checkbox" class="form-checkbox h-5 w-5 text-cyan-500 bg-gray-700 border-gray-600 rounded focus:ring-cyan-500">
-                            <span class="ml-3 text-lg">Vérification du momentum (fort/faible)</span>
+                            <span class="ml-3 text-base sm:text-lg">Vérification momentum</span>
                         </label>
                     </div>
                     <button id="reset-checklist" class="mt-6 bg-cyan-600 hover:bg-cyan-700 text-white font-bold py-2 px-4 rounded-lg transition duration-300">
@@ -187,28 +193,25 @@
             </div>
 
             <div id="actifs" class="content-section hidden">
-                <h2 class="text-3xl font-bold mb-6 text-white">Données des Actifs</h2>
-                <div class="bg-gray-800 p-4 rounded-lg shadow-lg">
-                    <div id="month-filters" class="flex flex-wrap gap-2 mb-4">
+                <h2 class="text-2xl sm:text-3xl font-bold mb-6 text-white">Données des Actifs</h2>
+                <div class="bg-gray-800 p-2 sm:p-4 rounded-lg shadow-lg">
+                    <div id="month-filters" class="flex flex-wrap gap-1 sm:gap-2 mb-4">
                         <!-- Month filter buttons will be injected here -->
                     </div>
                     <div class="flex items-center mb-4">
                         <i class="fas fa-search text-gray-400 mr-3"></i>
-                        <input type="text" id="searchInput" placeholder="Rechercher un actif..." class="w-full bg-gray-700 text-white border border-gray-600 rounded-lg py-2 px-4 focus:outline-none focus:ring-2 focus:ring-cyan-500">
+                        <input type="text" id="searchInput" placeholder="Rechercher..." class="w-full bg-gray-700 text-white border border-gray-600 rounded-lg py-2 px-4 focus:outline-none focus:ring-2 focus:ring-cyan-500">
                     </div>
                     <div class="table-container">
-                        <table class="min-w-full text-left">
-                            <thead class="bg-gray-700 sticky top-0">
+                        <table class="min-w-full text-left text-sm">
+                            <thead class="bg-gray-700 sticky top-0 text-xs sm:text-sm">
                                 <tr>
-                                    <th class="p-4 font-semibold cursor-pointer" data-sort="Actif">Actif <i class="fas fa-sort ml-2"></i></th>
-                                    <th class="p-4 font-semibold cursor-pointer" data-sort="TF">TF <i class="fas fa-sort ml-2"></i></th>
-                                    <th class="p-4 font-semibold cursor-pointer" data-sort="Rebond">Rebonds <i class="fas fa-sort ml-2"></i></th>
-                                    <th class="p-4 font-semibold cursor-pointer" data-sort="Risk Reward">RR <i class="fas fa-sort ml-2"></i></th>
-                                    <th class="p-4 font-semibold cursor-pointer" data-sort="Break Even">BE <i class="fas fa-sort ml-2"></i></th>
-                                    <th class="p-4 font-semibold">Jours Actifs</th>
-                                    <th class="p-4 font-semibold">Mois Inactifs</th>
-                                    <th class="p-4 font-semibold cursor-pointer" data-sort="Win Rate">Win Rate <i class="fas fa-sort ml-2"></i></th>
-                                    <th class="p-4 font-semibold cursor-pointer" data-sort="Drawdown">Drawdown <i class="fas fa-sort ml-2"></i></th>
+                                    <th class="p-2 sm:p-4 font-semibold cursor-pointer" data-sort="Actif">Actif <i class="fas fa-sort ml-1"></i></th>
+                                    <th class="p-2 sm:p-4 font-semibold cursor-pointer" data-sort="Rebond">Reb. <i class="fas fa-sort ml-1"></i></th>
+                                    <th class="p-2 sm:p-4 font-semibold cursor-pointer" data-sort="Risk Reward">RR <i class="fas fa-sort ml-1"></i></th>
+                                    <th class="p-2 sm:p-4 font-semibold hidden sm:table-cell">Mois Inactifs</th>
+                                    <th class="p-2 sm:p-4 font-semibold cursor-pointer" data-sort="Win Rate">Win% <i class="fas fa-sort ml-1"></i></th>
+                                    <th class="p-2 sm:p-4 font-semibold cursor-pointer" data-sort="Drawdown">DD% <i class="fas fa-sort ml-1"></i></th>
                                 </tr>
                             </thead>
                             <tbody id="assetTableBody" class="divide-y divide-gray-700"></tbody>
@@ -218,57 +221,57 @@
             </div>
 
             <div id="principes" class="content-section hidden">
-                <h2 class="text-3xl font-bold mb-6 text-white">Règles & Principes</h2>
-                <div class="bg-gray-800 p-6 rounded-lg shadow-lg">
-                    <h3 class="text-2xl font-bold text-cyan-400 mb-4">Les 6 Piliers du Trader</h3>
+                <h2 class="text-2xl sm:text-3xl font-bold mb-6 text-white">Règles & Principes</h2>
+                <div class="bg-gray-800 p-4 sm:p-6 rounded-lg shadow-lg">
+                    <h3 class="text-xl sm:text-2xl font-bold text-cyan-400 mb-4">Les 6 Piliers du Trader</h3>
                     <div class="space-y-4">
                         <details class="p-4 bg-gray-700 rounded-lg cursor-pointer">
-                            <summary class="font-semibold text-lg">1. La Discipline</summary>
-                            <p class="mt-2 text-gray-300">La capacité à se donner des règles et à s'y tenir de manière rigoureuse. C'est le garde-fou qui empêche de retomber dans la pulsion.</p>
+                            <summary class="font-semibold text-base sm:text-lg">1. La Discipline</summary>
+                            <p class="mt-2 text-gray-300 text-sm sm:text-base">La capacité à se donner des règles et à s'y tenir. C'est le garde-fou qui empêche de retomber dans la pulsion.</p>
                         </details>
                         <details class="p-4 bg-gray-700 rounded-lg cursor-pointer">
-                            <summary class="font-semibold text-lg">2. La Régularité</summary>
-                            <p class="mt-2 text-gray-300">L'application répétée d'une action. La régularité transforme la discipline en une habitude et cette habitude en une stabilité.</p>
+                            <summary class="font-semibold text-base sm:text-lg">2. La Régularité</summary>
+                            <p class="mt-2 text-gray-300 text-sm sm:text-base">L'application répétée d'une action. La régularité transforme la discipline en une habitude et cette habitude en une stabilité.</p>
                         </details>
                          <details class="p-4 bg-gray-700 rounded-lg cursor-pointer">
-                            <summary class="font-semibold text-lg">3. Les Probabilités</summary>
-                            <p class="mt-2 text-gray-300">Comprendre qu'il n'y a pas de certitude, mais un avantage statistique qui se manifeste sur une série de transactions.</p>
+                            <summary class="font-semibold text-base sm:text-lg">3. Les Probabilités</summary>
+                            <p class="mt-2 text-gray-300 text-sm sm:text-base">Comprendre qu'il n'y a pas de certitude, mais un avantage statistique qui se manifeste sur une série de transactions.</p>
                         </details>
                          <details class="p-4 bg-gray-700 rounded-lg cursor-pointer">
-                            <summary class="font-semibold text-lg">4. Les Émotions</summary>
-                            <p class="mt-2 text-gray-300">Le but n'est pas de les supprimer, mais de les comprendre pour ne pas appliquer les réflexes du passé aux situations présentes.</p>
+                            <summary class="font-semibold text-base sm:text-lg">4. Les Émotions</summary>
+                            <p class="mt-2 text-gray-300 text-sm sm:text-base">Le but n'est pas de les supprimer, mais de les comprendre pour ne pas appliquer les réflexes du passé aux situations présentes.</p>
                         </details>
                         <details class="p-4 bg-gray-700 rounded-lg cursor-pointer">
-                            <summary class="font-semibold text-lg">5. La Gestion du Risque</summary>
-                            <p class="mt-2 text-gray-300">Le processus d'identification, d'évaluation et de contrôle des pertes potentielles. Ce qui garantit la survie du capital.</p>
+                            <summary class="font-semibold text-base sm:text-lg">5. La Gestion du Risque</summary>
+                            <p class="mt-2 text-gray-300 text-sm sm:text-base">Le processus de contrôle des pertes potentielles. Ce qui garantit la survie du capital.</p>
                         </details>
                         <details class="p-4 bg-gray-700 rounded-lg cursor-pointer">
-                            <summary class="font-semibold text-lg">6. La Patience</summary>
-                            <p class="mt-2 text-gray-300">La capacité à attendre la bonne configuration sans forcer les événements. Ne pas trader est parfois la meilleure décision.</p>
+                            <summary class="font-semibold text-base sm:text-lg">6. La Patience</summary>
+                            <p class="mt-2 text-gray-300 text-sm sm:text-base">La capacité à attendre la bonne configuration sans forcer les événements. Ne pas trader est parfois la meilleure décision.</p>
                         </details>
                     </div>
                 </div>
             </div>
 
              <div id="notes" class="content-section hidden">
-                <h2 class="text-3xl font-bold mb-6 text-white">Notes Personnelles & Coach IA</h2>
-                <div class="bg-gray-800 p-6 rounded-lg shadow-lg">
-                    <textarea id="personalNotes" class="w-full h-64 bg-gray-700 text-white border border-gray-600 rounded-lg p-4 focus:outline-none focus:ring-2 focus:ring-cyan-500" placeholder="Écrivez vos pensées, analyses de trades, émotions ressenties..."></textarea>
-                    <div class="flex items-center gap-4 mt-4">
-                        <button id="saveNotes" class="bg-cyan-600 hover:bg-cyan-700 text-white font-bold py-2 px-4 rounded-lg transition duration-300">
-                            Enregistrer les notes
+                <h2 class="text-2xl sm:text-3xl font-bold mb-6 text-white">Notes & Coach IA</h2>
+                <div class="bg-gray-800 p-4 sm:p-6 rounded-lg shadow-lg">
+                    <textarea id="personalNotes" class="w-full h-48 sm:h-64 bg-gray-700 text-white border border-gray-600 rounded-lg p-4 focus:outline-none focus:ring-2 focus:ring-cyan-500" placeholder="Écrivez vos pensées, analyses de trades, émotions..."></textarea>
+                    <div class="flex flex-col sm:flex-row items-center gap-4 mt-4">
+                        <button id="saveNotes" class="w-full sm:w-auto bg-cyan-600 hover:bg-cyan-700 text-white font-bold py-2 px-4 rounded-lg transition duration-300">
+                            Enregistrer
                         </button>
-                         <button id="analyzeNotes" class="bg-amber-600 hover:bg-amber-700 text-white font-bold py-2 px-4 rounded-lg transition duration-300 flex items-center">
-                            <i class="fas fa-brain mr-2"></i> Analyser avec l'IA
+                         <button id="analyzeNotes" class="w-full sm:w-auto bg-amber-600 hover:bg-amber-700 text-white font-bold py-2 px-4 rounded-lg transition duration-300 flex items-center justify-center">
+                            <i class="fas fa-brain mr-2"></i> Analyser par IA
                         </button>
                         <p id="saveStatus" class="text-sm text-green-400 opacity-0 transition-opacity">Notes enregistrées !</p>
                     </div>
 
-                    <h3 class="text-2xl font-bold text-amber-400 mt-8 mb-4">Analyse du Coach IA</h3>
+                    <h3 class="text-xl sm:text-2xl font-bold text-amber-400 mt-8 mb-4">Analyse du Coach IA</h3>
                     <div id="notes-loader" class="hidden mt-6 flex justify-center">
                         <div class="loader"></div>
                     </div>
-                    <div id="notes-response" class="p-4 bg-gray-900 rounded-lg whitespace-pre-wrap"></div>
+                    <div id="notes-response" class="p-4 bg-gray-900 rounded-lg whitespace-pre-wrap text-sm"></div>
                 </div>
             </div>
 
@@ -429,18 +432,14 @@
             data.forEach(asset => {
                 const winRateColor = asset['Win Rate'] >= 45 ? 'text-green-400' : asset['Win Rate'] >= 35 ? 'text-yellow-400' : 'text-red-400';
                 const drawdownColor = asset['Drawdown'] <= 5 ? 'text-green-400' : asset['Drawdown'] <= 8 ? 'text-yellow-400' : 'text-red-400';
-                const beColor = asset['Break Even'].toUpperCase() === 'NON' || asset['Break Even'].toUpperCase() === 'N' ? 'text-red-400' : 'text-green-400';
                 
                 const row = `<tr class="hover:bg-gray-700/50">
-                        <td class="p-4 font-medium text-white">${asset.Actif}</td>
-                        <td class="p-4">${asset.TF}</td>
-                        <td class="p-4">${asset.Rebond}</td>
-                        <td class="p-4">${asset['Risk Reward']}</td>
-                        <td class="p-4 font-semibold ${beColor}">${asset['Break Even']}</td>
-                        <td class="p-4 text-sm text-gray-400">${asset['Jours actifs']}</td>
-                        <td class="p-4 text-sm text-gray-400">${asset['Mois inactifs']}</td>
-                        <td class="p-4 font-semibold ${winRateColor}">${asset['Win Rate']}%</td>
-                        <td class="p-4 font-semibold ${drawdownColor}">${asset.Drawdown}%</td>
+                        <td class="p-2 sm:p-4 font-medium text-white">${asset.Actif}</td>
+                        <td class="p-2 sm:p-4">${asset.Rebond}</td>
+                        <td class="p-2 sm:p-4">${asset['Risk Reward']}</td>
+                        <td class="p-2 sm:p-4 text-xs text-gray-400 hidden sm:table-cell">${asset['Mois inactifs']}</td>
+                        <td class="p-2 sm:p-4 font-semibold ${winRateColor}">${asset['Win Rate']}%</td>
+                        <td class="p-2 sm:p-4 font-semibold ${drawdownColor}">${asset.Drawdown}%</td>
                     </tr>`;
                 tableBody.innerHTML += row;
             });
@@ -485,9 +484,9 @@
             headers.forEach(h => {
                 const icon = h.querySelector('i');
                 if (icon) {
-                    icon.className = 'fas fa-sort ml-2';
+                    icon.className = 'fas fa-sort ml-1';
                     if (h.dataset.sort === currentSort.key) {
-                        icon.className = currentSort.order === 'asc' ? 'fas fa-sort-up ml-2' : 'fas fa-sort-down ml-2';
+                        icon.className = currentSort.order === 'asc' ? 'fas fa-sort-up ml-1' : 'fas fa-sort-down ml-1';
                     }
                 }
             });
@@ -508,9 +507,9 @@
 
         // --- Month Filter Logic ---
         const createMonthFilters = () => {
-            let buttonsHTML = `<button class="month-filter-btn px-3 py-1 text-sm rounded-md bg-gray-700 hover:bg-gray-600 active" data-month="all">Tous</button>`;
+            let buttonsHTML = `<button class="month-filter-btn px-2 py-1 text-xs sm:px-3 sm:py-1 sm:text-sm rounded-md bg-gray-700 hover:bg-gray-600 active" data-month="all">Tous</button>`;
             frenchMonths.forEach((month, index) => {
-                 buttonsHTML += `<button class="month-filter-btn px-3 py-1 text-sm rounded-md bg-gray-700 hover:bg-gray-600" data-month="${index + 1}">${month}</button>`;
+                 buttonsHTML += `<button class="month-filter-btn px-2 py-1 text-xs sm:px-3 sm:py-1 sm:text-sm rounded-md bg-gray-700 hover:bg-gray-600" data-month="${index + 1}">${month}</button>`;
             });
             monthFiltersContainer.innerHTML = buttonsHTML;
 
