@@ -15,18 +15,10 @@
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
         body {
             font-family: 'Inter', sans-serif;
-        }
-        .sidebar {
-            transition: transform 0.3s ease-in-out;
-        }
-        .main-content {
-            transition: margin-left 0.3s ease-in-out;
-        }
-        .sidebar-hidden {
-            transform: translateX(-100%);
+            padding-bottom: 80px; /* Add padding to prevent content from being hidden by the bottom nav */
         }
         .table-container {
-            max-height: calc(100vh - 320px); /* Adjusted for mobile view */
+            max-height: calc(100vh - 320px);
             overflow-y: auto;
         }
         ::-webkit-scrollbar {
@@ -43,9 +35,8 @@
         ::-webkit-scrollbar-thumb:hover {
             background: #6b7280;
         }
-        .active-nav {
-            background-color: #374151;
-            color: #f3f4f6;
+        .bottom-nav-link.active-nav {
+            color: #0891b2; /* cyan-600 */
         }
         .loader {
             border: 4px solid #f3f3f3;
@@ -60,7 +51,7 @@
             100% { transform: rotate(360deg); }
         }
         .month-filter-btn.active {
-            background-color: #0891b2; /* cyan-600 */
+            background-color: #0891b2;
             color: white;
             font-weight: bold;
         }
@@ -68,217 +59,202 @@
 </head>
 <body class="bg-gray-900 text-gray-200">
     
-    <button id="open-sidebar" class="lg:hidden p-2 bg-gray-800 rounded-md text-white fixed top-4 left-4 z-50">
-        <i class="fas fa-bars text-xl"></i>
-    </button>
-    
-    <div class="flex">
-        <!-- Sidebar -->
-        <aside id="sidebar" class="sidebar bg-gray-800 text-gray-300 w-64 min-h-screen p-4 fixed lg:relative lg:translate-x-0 transform -translate-x-full lg:block z-40">
-            <div class="flex items-center justify-between mb-8">
-                <h1 class="text-2xl font-bold text-white">Trader Présent</h1>
-                <button id="close-sidebar" class="lg:hidden text-gray-400 hover:text-white">
-                    <i class="fas fa-times text-xl"></i>
-                </button>
-            </div>
-            <nav>
-                <a href="#dashboard" class="nav-link flex items-center py-2.5 px-4 my-2 rounded-lg hover:bg-gray-700 active-nav">
-                    <i class="fas fa-tachometer-alt w-6"></i>
-                    <span class="ml-3">Tableau de bord</span>
-                </a>
-                <a href="#ia-analysis" class="nav-link flex items-center py-2.5 px-4 my-2 rounded-lg hover:bg-gray-700">
-                    <i class="fas fa-robot w-6"></i>
-                    <span class="ml-3">Analyse IA</span>
-                </a>
-                <a href="#checklist" class="nav-link flex items-center py-2.5 px-4 my-2 rounded-lg hover:bg-gray-700">
-                    <i class="fas fa-check-square w-6"></i>
-                    <span class="ml-3">Check-list Entrée</span>
-                </a>
-                <a href="#actifs" class="nav-link flex items-center py-2.5 px-4 my-2 rounded-lg hover:bg-gray-700">
-                    <i class="fas fa-table w-6"></i>
-                    <span class="ml-3">Données Actifs</span>
-                </a>
-                 <a href="#principes" class="nav-link flex items-center py-2.5 px-4 my-2 rounded-lg hover:bg-gray-700">
-                    <i class="fas fa-book-open w-6"></i>
-                    <span class="ml-3">Règles & Principes</span>
-                </a>
-                <a href="#notes" class="nav-link flex items-center py-2.5 px-4 my-2 rounded-lg hover:bg-gray-700">
-                    <i class="fas fa-sticky-note w-6"></i>
-                    <span class="ml-3">Notes Personnelles</span>
-                </a>
-            </nav>
-        </aside>
-
-        <!-- Main Content -->
-        <main id="main-content" class="main-content flex-1 p-4 sm:p-6 lg:p-8 lg:ml-64">
-            
-            <div id="dashboard" class="content-section">
-                 <h2 class="text-2xl sm:text-3xl font-bold mb-6 text-white">Tableau de Bord</h2>
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    <div class="bg-gray-800 p-4 sm:p-6 rounded-lg shadow-lg">
-                        <h3 class="font-bold text-lg sm:text-xl mb-3 text-cyan-400">Les 5 Vérités du Marché</h3>
-                        <ul class="list-disc list-inside space-y-2 text-gray-300 text-sm sm:text-base">
-                            <li>Tout peut arriver.</li>
-                            <li>Je n’ai pas besoin de savoir ce qui va arriver pour gagner.</li>
-                            <li>Les gains et pertes se distribuent de façon aléatoire.</li>
-                            <li>Mon avantage n’est qu’une probabilité, jamais une certitude.</li>
-                            <li>Chaque instant de marché est unique.</li>
-                        </ul>
-                    </div>
-                    <div class="bg-gray-800 p-4 sm:p-6 rounded-lg shadow-lg">
-                        <h3 class="font-bold text-lg sm:text-xl mb-3 text-amber-400">Mes Mantras de Trader</h3>
-                        <ul class="list-disc list-inside space-y-2 text-gray-300 text-sm sm:text-base">
-                            <li>« Mon rôle est d’exécuter mon plan, pas de prédire. »</li>
-                            <li>« La sérénité vient de la régularité, pas du résultat d’un trade isolé. »</li>
-                            <li>« Je n’ai rien à prouver au marché. »</li>
-                            <li>« Je gagne sur la durée, pas dans l’instant. »</li>
-                        </ul>
-                    </div>
-                    <div class="bg-gray-800 p-4 sm:p-6 rounded-lg shadow-lg">
-                        <h3 class="font-bold text-lg sm:text-xl mb-3 text-red-400">Limites de Perte</h3>
-                        <ul class="list-disc list-inside space-y-2 text-gray-300 text-sm sm:text-base">
-                            <li><span class="font-semibold">2%</span> par jour</li>
-                            <li><span class="font-semibold">6%</span> par semaine</li>
-                            <li><span class="font-semibold">18%</span> par mois</li>
-                        </ul>
-                    </div>
+    <!-- Main Content -->
+    <main id="main-content" class="flex-1 p-4 sm:p-6 lg:p-8">
+        
+        <div id="dashboard" class="content-section">
+             <h2 class="text-2xl sm:text-3xl font-bold mb-6 text-white">Tableau de Bord</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="bg-gray-800 p-4 sm:p-6 rounded-lg shadow-lg">
+                    <h3 class="font-bold text-lg sm:text-xl mb-3 text-cyan-400">Les 5 Vérités du Marché</h3>
+                    <ul class="list-disc list-inside space-y-2 text-gray-300 text-sm sm:text-base">
+                        <li>Tout peut arriver.</li>
+                        <li>Je n’ai pas besoin de savoir ce qui va arriver pour gagner.</li>
+                        <li>Les gains et pertes se distribuent de façon aléatoire.</li>
+                        <li>Mon avantage n’est qu’une probabilité, jamais une certitude.</li>
+                        <li>Chaque instant de marché est unique.</li>
+                    </ul>
+                </div>
+                <div class="bg-gray-800 p-4 sm:p-6 rounded-lg shadow-lg">
+                    <h3 class="font-bold text-lg sm:text-xl mb-3 text-amber-400">Mes Mantras de Trader</h3>
+                    <ul class="list-disc list-inside space-y-2 text-gray-300 text-sm sm:text-base">
+                        <li>« Mon rôle est d’exécuter mon plan, pas de prédire. »</li>
+                        <li>« La sérénité vient de la régularité, pas du résultat d’un trade isolé. »</li>
+                        <li>« Je n’ai rien à prouver au marché. »</li>
+                        <li>« Je gagne sur la durée, pas dans l’instant. »</li>
+                    </ul>
+                </div>
+                <div class="bg-gray-800 p-4 sm:p-6 rounded-lg shadow-lg">
+                    <h3 class="font-bold text-lg sm:text-xl mb-3 text-red-400">Limites de Perte</h3>
+                    <ul class="list-disc list-inside space-y-2 text-gray-300 text-sm sm:text-base">
+                        <li><span class="font-semibold">2%</span> par jour</li>
+                        <li><span class="font-semibold">6%</span> par semaine</li>
+                        <li><span class="font-semibold">18%</span> par mois</li>
+                    </ul>
                 </div>
             </div>
+        </div>
 
-            <div id="ia-analysis" class="content-section hidden">
-                <h2 class="text-2xl sm:text-3xl font-bold mb-6 text-white">Analyse de Marché par IA</h2>
-                <div class="bg-gray-800 p-4 sm:p-6 rounded-lg shadow-lg">
-                    <p class="mb-4 text-gray-400 text-sm sm:text-base">Posez une question sur un actif (ex: "analyse EUR/USD") ou les dernières nouvelles.</p>
-                    <div class="flex flex-col sm:flex-row gap-4">
-                        <input type="text" id="ia-prompt" class="flex-grow bg-gray-700 text-white border border-gray-600 rounded-lg py-2 px-4 focus:outline-none focus:ring-2 focus:ring-cyan-500" placeholder="Ex: Dernières nouvelles sur le Bitcoin...">
-                        <button id="ia-submit" class="bg-cyan-600 hover:bg-cyan-700 text-white font-bold py-2 px-6 rounded-lg transition duration-300 flex items-center justify-center">
-                            <span class="mr-2">Analyser</span>
-                            <i class="fas fa-paper-plane"></i>
-                        </button>
-                    </div>
-                    <div id="ia-loader" class="hidden mt-6 flex justify-center">
-                        <div class="loader"></div>
-                    </div>
-                    <div id="ia-response" class="mt-6 p-4 bg-gray-900 rounded-lg whitespace-pre-wrap text-sm"></div>
-                </div>
-            </div>
-
-            <div id="checklist" class="content-section hidden">
-                <h2 class="text-2xl sm:text-3xl font-bold mb-6 text-white">Check-list d'Entrée</h2>
-                <div class="bg-gray-800 p-4 sm:p-6 rounded-lg shadow-lg">
-                    <div class="space-y-3">
-                        <label class="flex items-center cursor-pointer">
-                            <input type="checkbox" class="form-checkbox h-5 w-5 text-cyan-500 bg-gray-700 border-gray-600 rounded focus:ring-cyan-500">
-                            <span class="ml-3 text-base sm:text-lg">Prix > MM 150</span>
-                        </label>
-                        <label class="flex items-center cursor-pointer">
-                            <input type="checkbox" class="form-checkbox h-5 w-5 text-cyan-500 bg-gray-700 border-gray-600 rounded focus:ring-cyan-500">
-                            <span class="ml-3 text-base sm:text-lg">Clôture M30 > Résistance</span>
-                        </label>
-                        <label class="flex items-center cursor-pointer">
-                            <input type="checkbox" class="form-checkbox h-5 w-5 text-cyan-500 bg-gray-700 border-gray-600 rounded focus:ring-cyan-500">
-                            <span class="ml-3 text-base sm:text-lg">SL sous MM100 & Résistance</span>
-                        </label>
-                         <label class="flex items-center cursor-pointer">
-                            <input type="checkbox" class="form-checkbox h-5 w-5 text-cyan-500 bg-gray-700 border-gray-600 rounded focus:ring-cyan-500">
-                            <span class="ml-3 text-base sm:text-lg">Risque par trade < 2%</span>
-                        </label>
-                        <label class="flex items-center cursor-pointer">
-                            <input type="checkbox" class="form-checkbox h-5 w-5 text-cyan-500 bg-gray-700 border-gray-600 rounded focus:ring-cyan-500">
-                            <span class="ml-3 text-base sm:text-lg">Vérification momentum</span>
-                        </label>
-                    </div>
-                    <button id="reset-checklist" class="mt-6 bg-cyan-600 hover:bg-cyan-700 text-white font-bold py-2 px-4 rounded-lg transition duration-300">
-                        Réinitialiser
+        <div id="ia-analysis" class="content-section hidden">
+            <h2 class="text-2xl sm:text-3xl font-bold mb-6 text-white">Analyse de Marché par IA</h2>
+            <div class="bg-gray-800 p-4 sm:p-6 rounded-lg shadow-lg">
+                <p class="mb-4 text-gray-400 text-sm sm:text-base">Posez une question sur un actif (ex: "analyse EUR/USD") ou les dernières nouvelles.</p>
+                <div class="flex flex-col sm:flex-row gap-4">
+                    <input type="text" id="ia-prompt" class="flex-grow bg-gray-700 text-white border border-gray-600 rounded-lg py-2 px-4 focus:outline-none focus:ring-2 focus:ring-cyan-500" placeholder="Ex: Dernières nouvelles sur le Bitcoin...">
+                    <button id="ia-submit" class="bg-cyan-600 hover:bg-cyan-700 text-white font-bold py-2 px-6 rounded-lg transition duration-300 flex items-center justify-center">
+                        <span class="mr-2">Analyser</span>
+                        <i class="fas fa-paper-plane"></i>
                     </button>
                 </div>
+                <div id="ia-loader" class="hidden mt-6 flex justify-center">
+                    <div class="loader"></div>
+                </div>
+                <div id="ia-response" class="mt-6 p-4 bg-gray-900 rounded-lg whitespace-pre-wrap text-sm"></div>
             </div>
+        </div>
 
-            <div id="actifs" class="content-section hidden">
-                <h2 class="text-2xl sm:text-3xl font-bold mb-6 text-white">Données des Actifs</h2>
-                <div class="bg-gray-800 p-2 sm:p-4 rounded-lg shadow-lg">
-                    <div id="month-filters" class="flex flex-wrap gap-1 sm:gap-2 mb-4">
-                        <!-- Month filter buttons will be injected here -->
-                    </div>
-                    <div class="flex items-center mb-4">
-                        <i class="fas fa-search text-gray-400 mr-3"></i>
-                        <input type="text" id="searchInput" placeholder="Rechercher..." class="w-full bg-gray-700 text-white border border-gray-600 rounded-lg py-2 px-4 focus:outline-none focus:ring-2 focus:ring-cyan-500">
-                    </div>
-                    <div class="table-container">
-                        <table class="min-w-full text-left text-sm">
-                            <thead class="bg-gray-700 sticky top-0 text-xs sm:text-sm">
-                                <tr>
-                                    <th class="p-2 sm:p-4 font-semibold cursor-pointer" data-sort="Actif">Actif <i class="fas fa-sort ml-1"></i></th>
-                                    <th class="p-2 sm:p-4 font-semibold cursor-pointer" data-sort="Rebond">Reb. <i class="fas fa-sort ml-1"></i></th>
-                                    <th class="p-2 sm:p-4 font-semibold cursor-pointer" data-sort="Risk Reward">RR <i class="fas fa-sort ml-1"></i></th>
-                                    <th class="p-2 sm:p-4 font-semibold hidden sm:table-cell">Mois Inactifs</th>
-                                    <th class="p-2 sm:p-4 font-semibold cursor-pointer" data-sort="Win Rate">Win% <i class="fas fa-sort ml-1"></i></th>
-                                    <th class="p-2 sm:p-4 font-semibold cursor-pointer" data-sort="Drawdown">DD% <i class="fas fa-sort ml-1"></i></th>
-                                </tr>
-                            </thead>
-                            <tbody id="assetTableBody" class="divide-y divide-gray-700"></tbody>
-                        </table>
-                    </div>
+        <div id="checklist" class="content-section hidden">
+            <h2 class="text-2xl sm:text-3xl font-bold mb-6 text-white">Check-list d'Entrée</h2>
+            <div class="bg-gray-800 p-4 sm:p-6 rounded-lg shadow-lg">
+                <div class="space-y-3">
+                    <label class="flex items-center cursor-pointer">
+                        <input type="checkbox" class="form-checkbox h-5 w-5 text-cyan-500 bg-gray-700 border-gray-600 rounded focus:ring-cyan-500">
+                        <span class="ml-3 text-base sm:text-lg">Prix > MM 150</span>
+                    </label>
+                    <label class="flex items-center cursor-pointer">
+                        <input type="checkbox" class="form-checkbox h-5 w-5 text-cyan-500 bg-gray-700 border-gray-600 rounded focus:ring-cyan-500">
+                        <span class="ml-3 text-base sm:text-lg">Clôture M30 > Résistance</span>
+                    </label>
+                    <label class="flex items-center cursor-pointer">
+                        <input type="checkbox" class="form-checkbox h-5 w-5 text-cyan-500 bg-gray-700 border-gray-600 rounded focus:ring-cyan-500">
+                        <span class="ml-3 text-base sm:text-lg">SL sous MM100 & Résistance</span>
+                    </label>
+                     <label class="flex items-center cursor-pointer">
+                        <input type="checkbox" class="form-checkbox h-5 w-5 text-cyan-500 bg-gray-700 border-gray-600 rounded focus:ring-cyan-500">
+                        <span class="ml-3 text-base sm:text-lg">Risque par trade < 2%</span>
+                    </label>
+                    <label class="flex items-center cursor-pointer">
+                        <input type="checkbox" class="form-checkbox h-5 w-5 text-cyan-500 bg-gray-700 border-gray-600 rounded focus:ring-cyan-500">
+                        <span class="ml-3 text-base sm:text-lg">Vérification momentum</span>
+                    </label>
+                </div>
+                <button id="reset-checklist" class="mt-6 bg-cyan-600 hover:bg-cyan-700 text-white font-bold py-2 px-4 rounded-lg transition duration-300">
+                    Réinitialiser
+                </button>
+            </div>
+        </div>
+
+        <div id="actifs" class="content-section hidden">
+            <h2 class="text-2xl sm:text-3xl font-bold mb-6 text-white">Données des Actifs</h2>
+            <div class="bg-gray-800 p-2 sm:p-4 rounded-lg shadow-lg">
+                <div id="month-filters" class="flex flex-wrap gap-1 sm:gap-2 mb-4">
+                    <!-- Month filter buttons will be injected here -->
+                </div>
+                <div class="flex items-center mb-4">
+                    <i class="fas fa-search text-gray-400 mr-3"></i>
+                    <input type="text" id="searchInput" placeholder="Rechercher..." class="w-full bg-gray-700 text-white border border-gray-600 rounded-lg py-2 px-4 focus:outline-none focus:ring-2 focus:ring-cyan-500">
+                </div>
+                <div class="table-container">
+                    <table class="min-w-full text-left text-sm">
+                        <thead class="bg-gray-700 sticky top-0 text-xs sm:text-sm">
+                            <tr>
+                                <th class="p-2 sm:p-4 font-semibold cursor-pointer" data-sort="Actif">Actif <i class="fas fa-sort ml-1"></i></th>
+                                <th class="p-2 sm:p-4 font-semibold cursor-pointer" data-sort="Rebond">Reb. <i class="fas fa-sort ml-1"></i></th>
+                                <th class="p-2 sm:p-4 font-semibold cursor-pointer" data-sort="Risk Reward">RR <i class="fas fa-sort ml-1"></i></th>
+                                <th class="p-2 sm:p-4 font-semibold hidden sm:table-cell">Mois Inactifs</th>
+                                <th class="p-2 sm:p-4 font-semibold cursor-pointer" data-sort="Win Rate">Win% <i class="fas fa-sort ml-1"></i></th>
+                                <th class="p-2 sm:p-4 font-semibold cursor-pointer" data-sort="Drawdown">DD% <i class="fas fa-sort ml-1"></i></th>
+                            </tr>
+                        </thead>
+                        <tbody id="assetTableBody" class="divide-y divide-gray-700"></tbody>
+                    </table>
                 </div>
             </div>
+        </div>
 
-            <div id="principes" class="content-section hidden">
-                <h2 class="text-2xl sm:text-3xl font-bold mb-6 text-white">Règles & Principes</h2>
-                <div class="bg-gray-800 p-4 sm:p-6 rounded-lg shadow-lg">
-                    <h3 class="text-xl sm:text-2xl font-bold text-cyan-400 mb-4">Les 6 Piliers du Trader</h3>
-                    <div class="space-y-4">
-                        <details class="p-4 bg-gray-700 rounded-lg cursor-pointer">
-                            <summary class="font-semibold text-base sm:text-lg">1. La Discipline</summary>
-                            <p class="mt-2 text-gray-300 text-sm sm:text-base">La capacité à se donner des règles et à s'y tenir. C'est le garde-fou qui empêche de retomber dans la pulsion.</p>
-                        </details>
-                        <details class="p-4 bg-gray-700 rounded-lg cursor-pointer">
-                            <summary class="font-semibold text-base sm:text-lg">2. La Régularité</summary>
-                            <p class="mt-2 text-gray-300 text-sm sm:text-base">L'application répétée d'une action. La régularité transforme la discipline en une habitude et cette habitude en une stabilité.</p>
-                        </details>
-                         <details class="p-4 bg-gray-700 rounded-lg cursor-pointer">
-                            <summary class="font-semibold text-base sm:text-lg">3. Les Probabilités</summary>
-                            <p class="mt-2 text-gray-300 text-sm sm:text-base">Comprendre qu'il n'y a pas de certitude, mais un avantage statistique qui se manifeste sur une série de transactions.</p>
-                        </details>
-                         <details class="p-4 bg-gray-700 rounded-lg cursor-pointer">
-                            <summary class="font-semibold text-base sm:text-lg">4. Les Émotions</summary>
-                            <p class="mt-2 text-gray-300 text-sm sm:text-base">Le but n'est pas de les supprimer, mais de les comprendre pour ne pas appliquer les réflexes du passé aux situations présentes.</p>
-                        </details>
-                        <details class="p-4 bg-gray-700 rounded-lg cursor-pointer">
-                            <summary class="font-semibold text-base sm:text-lg">5. La Gestion du Risque</summary>
-                            <p class="mt-2 text-gray-300 text-sm sm:text-base">Le processus de contrôle des pertes potentielles. Ce qui garantit la survie du capital.</p>
-                        </details>
-                        <details class="p-4 bg-gray-700 rounded-lg cursor-pointer">
-                            <summary class="font-semibold text-base sm:text-lg">6. La Patience</summary>
-                            <p class="mt-2 text-gray-300 text-sm sm:text-base">La capacité à attendre la bonne configuration sans forcer les événements. Ne pas trader est parfois la meilleure décision.</p>
-                        </details>
-                    </div>
+        <div id="principes" class="content-section hidden">
+            <h2 class="text-2xl sm:text-3xl font-bold mb-6 text-white">Règles & Principes</h2>
+            <div class="bg-gray-800 p-4 sm:p-6 rounded-lg shadow-lg">
+                <h3 class="text-xl sm:text-2xl font-bold text-cyan-400 mb-4">Les 6 Piliers du Trader</h3>
+                <div class="space-y-4">
+                    <details class="p-4 bg-gray-700 rounded-lg cursor-pointer">
+                        <summary class="font-semibold text-base sm:text-lg">1. La Discipline</summary>
+                        <p class="mt-2 text-gray-300 text-sm sm:text-base">La capacité à se donner des règles et à s'y tenir. C'est le garde-fou qui empêche de retomber dans la pulsion.</p>
+                    </details>
+                    <details class="p-4 bg-gray-700 rounded-lg cursor-pointer">
+                        <summary class="font-semibold text-base sm:text-lg">2. La Régularité</summary>
+                        <p class="mt-2 text-gray-300 text-sm sm:text-base">L'application répétée d'une action. La régularité transforme la discipline en une habitude et cette habitude en une stabilité.</p>
+                    </details>
+                     <details class="p-4 bg-gray-700 rounded-lg cursor-pointer">
+                        <summary class="font-semibold text-base sm:text-lg">3. Les Probabilités</summary>
+                        <p class="mt-2 text-gray-300 text-sm sm:text-base">Comprendre qu'il n'y a pas de certitude, mais un avantage statistique qui se manifeste sur une série de transactions.</p>
+                    </details>
+                     <details class="p-4 bg-gray-700 rounded-lg cursor-pointer">
+                        <summary class="font-semibold text-base sm:text-lg">4. Les Émotions</summary>
+                        <p class="mt-2 text-gray-300 text-sm sm:text-base">Le but n'est pas de les supprimer, mais de les comprendre pour ne pas appliquer les réflexes du passé aux situations présentes.</p>
+                    </details>
+                    <details class="p-4 bg-gray-700 rounded-lg cursor-pointer">
+                        <summary class="font-semibold text-base sm:text-lg">5. La Gestion du Risque</summary>
+                        <p class="mt-2 text-gray-300 text-sm sm:text-base">Le processus de contrôle des pertes potentielles. Ce qui garantit la survie du capital.</p>
+                    </details>
+                    <details class="p-4 bg-gray-700 rounded-lg cursor-pointer">
+                        <summary class="font-semibold text-base sm:text-lg">6. La Patience</summary>
+                        <p class="mt-2 text-gray-300 text-sm sm:text-base">La capacité à attendre la bonne configuration sans forcer les événements. Ne pas trader est parfois la meilleure décision.</p>
+                    </details>
                 </div>
             </div>
+        </div>
 
-             <div id="notes" class="content-section hidden">
-                <h2 class="text-2xl sm:text-3xl font-bold mb-6 text-white">Notes & Coach IA</h2>
-                <div class="bg-gray-800 p-4 sm:p-6 rounded-lg shadow-lg">
-                    <textarea id="personalNotes" class="w-full h-48 sm:h-64 bg-gray-700 text-white border border-gray-600 rounded-lg p-4 focus:outline-none focus:ring-2 focus:ring-cyan-500" placeholder="Écrivez vos pensées, analyses de trades, émotions..."></textarea>
-                    <div class="flex flex-col sm:flex-row items-center gap-4 mt-4">
-                        <button id="saveNotes" class="w-full sm:w-auto bg-cyan-600 hover:bg-cyan-700 text-white font-bold py-2 px-4 rounded-lg transition duration-300">
-                            Enregistrer
-                        </button>
-                         <button id="analyzeNotes" class="w-full sm:w-auto bg-amber-600 hover:bg-amber-700 text-white font-bold py-2 px-4 rounded-lg transition duration-300 flex items-center justify-center">
-                            <i class="fas fa-brain mr-2"></i> Analyser par IA
-                        </button>
-                        <p id="saveStatus" class="text-sm text-green-400 opacity-0 transition-opacity">Notes enregistrées !</p>
-                    </div>
-
-                    <h3 class="text-xl sm:text-2xl font-bold text-amber-400 mt-8 mb-4">Analyse du Coach IA</h3>
-                    <div id="notes-loader" class="hidden mt-6 flex justify-center">
-                        <div class="loader"></div>
-                    </div>
-                    <div id="notes-response" class="p-4 bg-gray-900 rounded-lg whitespace-pre-wrap text-sm"></div>
+         <div id="notes" class="content-section hidden">
+            <h2 class="text-2xl sm:text-3xl font-bold mb-6 text-white">Notes & Coach IA</h2>
+            <div class="bg-gray-800 p-4 sm:p-6 rounded-lg shadow-lg">
+                <textarea id="personalNotes" class="w-full h-48 sm:h-64 bg-gray-700 text-white border border-gray-600 rounded-lg p-4 focus:outline-none focus:ring-2 focus:ring-cyan-500" placeholder="Écrivez vos pensées, analyses de trades, émotions..."></textarea>
+                <div class="flex flex-col sm:flex-row items-center gap-4 mt-4">
+                    <button id="saveNotes" class="w-full sm:w-auto bg-cyan-600 hover:bg-cyan-700 text-white font-bold py-2 px-4 rounded-lg transition duration-300">
+                        Enregistrer
+                    </button>
+                     <button id="analyzeNotes" class="w-full sm:w-auto bg-amber-600 hover:bg-amber-700 text-white font-bold py-2 px-4 rounded-lg transition duration-300 flex items-center justify-center">
+                        <i class="fas fa-brain mr-2"></i> Analyser par IA
+                    </button>
+                    <p id="saveStatus" class="text-sm text-green-400 opacity-0 transition-opacity">Notes enregistrées !</p>
                 </div>
-            </div>
 
-        </main>
-    </div>
+                <h3 class="text-xl sm:text-2xl font-bold text-amber-400 mt-8 mb-4">Analyse du Coach IA</h3>
+                <div id="notes-loader" class="hidden mt-6 flex justify-center">
+                    <div class="loader"></div>
+                </div>
+                <div id="notes-response" class="p-4 bg-gray-900 rounded-lg whitespace-pre-wrap text-sm"></div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Bottom Navigation -->
+    <footer class="fixed bottom-0 left-0 right-0 bg-gray-800 border-t border-gray-700 shadow-lg z-50">
+        <nav class="flex justify-around items-center h-16">
+            <a href="#dashboard" class="bottom-nav-link flex flex-col items-center justify-center text-gray-400 w-full active-nav">
+                <i class="fas fa-tachometer-alt text-xl"></i>
+                <span class="text-xs mt-1">Dashboard</span>
+            </a>
+            <a href="#ia-analysis" class="bottom-nav-link flex flex-col items-center justify-center text-gray-400 w-full">
+                <i class="fas fa-robot text-xl"></i>
+                <span class="text-xs mt-1">Analyse IA</span>
+            </a>
+            <a href="#checklist" class="bottom-nav-link flex flex-col items-center justify-center text-gray-400 w-full">
+                <i class="fas fa-check-square text-xl"></i>
+                <span class="text-xs mt-1">Check-list</span>
+            </a>
+            <a href="#actifs" class="bottom-nav-link flex flex-col items-center justify-center text-gray-400 w-full">
+                <i class="fas fa-table text-xl"></i>
+                <span class="text-xs mt-1">Actifs</span>
+            </a>
+            <a href="#notes" class="bottom-nav-link flex flex-col items-center justify-center text-gray-400 w-full">
+                <i class="fas fa-sticky-note text-xl"></i>
+                <span class="text-xs mt-1">Notes</span>
+            </a>
+        </nav>
+    </footer>
+
 
 <script>
     // --- DATA FROM THE DOCUMENT ---
@@ -339,16 +315,14 @@
         const tableBody = document.getElementById('assetTableBody');
         const searchInput = document.getElementById('searchInput');
         const headers = document.querySelectorAll('#actifs thead th');
-        const navLinks = document.querySelectorAll('.nav-link');
         const contentSections = document.querySelectorAll('.content-section');
         const resetChecklistBtn = document.getElementById('reset-checklist');
         const personalNotes = document.getElementById('personalNotes');
         const saveNotesBtn = document.getElementById('saveNotes');
         const saveStatus = document.getElementById('saveStatus');
-        const sidebar = document.getElementById('sidebar');
-        const mainContent = document.getElementById('main-content');
-        const openSidebarBtn = document.getElementById('open-sidebar');
-        const closeSidebarBtn = document.getElementById('close-sidebar');
+        
+        // New bottom nav links
+        const navLinks = document.querySelectorAll('.bottom-nav-link');
 
         // Gemini API Elements
         const iaPromptInput = document.getElementById('ia-prompt');
@@ -529,8 +503,10 @@
         const switchView = (hash) => {
             contentSections.forEach(section => section.classList.add('hidden'));
             navLinks.forEach(link => link.classList.remove('active-nav'));
+
             const activeSection = document.querySelector(hash);
-            const activeLink = document.querySelector(`.nav-link[href="${hash}"]`);
+            const activeLink = document.querySelector(`.bottom-nav-link[href="${hash}"]`);
+
             if (activeSection) activeSection.classList.remove('hidden');
             if (activeLink) activeLink.classList.add('active-nav');
         };
@@ -540,9 +516,6 @@
                 e.preventDefault();
                 const hash = link.getAttribute('href');
                 window.location.hash = hash;
-                if(window.innerWidth < 1024) {
-                    sidebar.classList.add('sidebar-hidden');
-                }
             });
         });
         
@@ -583,10 +556,6 @@
             callGeminiAPI(notes, systemPrompt, false, notesLoader, notesResponseContainer);
         });
 
-        // --- Sidebar Toggle for Mobile ---
-        openSidebarBtn.addEventListener('click', () => sidebar.classList.remove('sidebar-hidden'));
-        closeSidebarBtn.addEventListener('click', () => sidebar.classList.add('sidebar-hidden'));
-        
         // --- Initial Load ---
         createMonthFilters();
         applyFiltersAndSort();
