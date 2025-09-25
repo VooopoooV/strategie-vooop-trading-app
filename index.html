@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="fr" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tableau de Bord du Trader</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .sidebar {
+            transition: transform 0.3s ease-in-out;
+        }
+        .main-content {
+            transition: margin-left 0.3s ease-in-out;
+        }
+        .sidebar-hidden {
+            transform: translateX(-100%);
+        }
+        .table-container {
+            max-height: calc(100vh - 300px); /* Adjusted for month filter */
+            overflow-y: auto;
+        }
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #1f2937;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #4b5563;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #6b7280;
+        }
+        .active-nav {
+            background-color: #374151;
+            color: #f3f4f6;
+        }
+        .loader {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #3498db;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .month-filter-btn.active {
+            background-color: #0891b2; /* cyan-600 */
+            color: white;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-gray-200">
+    <div class="flex">
+        <!-- Sidebar -->
+        <aside id="sidebar" class="sidebar bg-gray-800 text-gray-300 w-64 min-h-screen p-4 fixed lg:relative lg:translate-x-0 transform -translate-x-full lg:block">
+            <div class="flex items-center justify-between mb-8">
+                <h1 class="text-2xl font-bold text-white">Trader Présent</h1>
+                <button id="close-sidebar" class="lg:hidden text-gray-400 hover:text-white">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+            <nav>
+                <a href="#dashboard" class="nav-link flex items-center py-2.5 px-4 my-2 rounded-lg hover:bg-gray-700 active-nav">
+                    <i class="fas fa-tachometer-alt w-6"></i>
+                    <span class="ml-3">Tableau de bord</span>
+                </a>
+                <a href="#ia-analysis" class="nav-link flex items-center py-2.5 px-4 my-2 rounded-lg hover:bg-gray-700">
+                    <i class="fas fa-robot w-6"></i>
+                    <span class="ml-3">Analyse IA</span>
+                </a>
+                <a href="#checklist" class="nav-link flex items-center py-2.5 px-4 my-2 rounded-lg hover:bg-gray-700">
+                    <i class="fas fa-check-square w-6"></i>
+                    <span class="ml-3">Check-list Entrée</span>
+                </a>
+                <a href="#actifs" class="nav-link flex items-center py-2.5 px-4 my-2 rounded-lg hover:bg-gray-700">
+                    <i class="fas fa-table w-6"></i>
+                    <span class="ml-3">Données Actifs</span>
+                </a>
+                 <a href="#principes" class="nav-link flex items-center py-2.5 px-4 my-2 rounded-lg hover:bg-gray-700">
+                    <i class="fas fa-book-open w-6"></i>
+                    <span class="ml-3">Règles & Principes</span>
+                </a>
+                <a href="#notes" class="nav-link flex items-center py-2.5 px-4 my-2 rounded-lg hover:bg-gray-700">
+                    <i class="fas fa-sticky-note w-6"></i>
+                    <span class="ml-3">Notes Personnelles</span>
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main id="main-content" class="main-content flex-1 p-4 lg:p-8 lg:ml-64">
+             <button id="open-sidebar" class="lg:hidden p-2 bg-gray-800 rounded-md text-white fixed top-4 left-4 z-50">
+                <i class="fas fa-bars text-xl"></i>
+            </button>
+            
+            <div id="dashboard" class="content-section">
+                 <h2 class="text-3xl font-bold mb-6 text-white">Tableau de Bord</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div class="bg-gray-800 p-6 rounded-lg shadow-lg">
+                        <h3 class="font-bold text-xl mb-3 text-cyan-400">Les 5 Vérités du Marché</h3>
+                        <ul class="list-disc list-inside space-y-2 text-gray-300">
+                            <li>Tout peut arriver.</li>
+                            <li>Je n’ai pas besoin de savoir ce qui va arriver pour gagner.</li>
+                            <li>Les gains et pertes se distribuent de façon aléatoire.</li>
+                            <li>Mon avantage n’est qu’une probabilité, jamais une certitude.</li>
+                            <li>Chaque instant de marché est unique.</li>
+                        </ul>
+                    </div>
+                    <div class="bg-gray-800 p-6 rounded-lg shadow-lg">
+                        <h3 class="font-bold text-xl mb-3 text-amber-400">Mes Mantras de Trader</h3>
+                        <ul class="list-disc list-inside space-y-2 text-gray-300">
+                            <li>« Mon rôle est d’exécuter mon plan, pas de prédire. »</li>
+                            <li>« La sérénité vient de la régularité, pas du résultat d’un trade isolé. »</li>
+                            <li>« Je n’ai rien à prouver au marché. »</li>
+                            <li>« Je gagne sur la durée, pas dans l’instant. »</li>
+                        </ul>
+                    </div>
+                    <div class="bg-gray-800 p-6 rounded-lg shadow-lg">
+                        <h3 class="font-bold text-xl mb-3 text-red-400">Limites de Perte (Non Négociable)</h3>
+                        <ul class="list-disc list-inside space-y-2 text-gray-300">
+                            <li><span class="font-semibold">2%</span> par jour</li>
+                            <li><span class="font-semibold">6%</span> par semaine</li>
+                            <li><span class="font-semibold">18%</span> par mois</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div id="ia-analysis" class="content-section hidden">
+                <h2 class="text-3xl font-bold mb-6 text-white">Analyse de Marché par IA</h2>
+                <div class="bg-gray-800 p-6 rounded-lg shadow-lg">
+                    <p class="mb-4 text-gray-400">Posez une question sur un actif (ex: "analyse technique pour EUR/USD") ou demandez les dernières nouvelles (ex: "dernières nouvelles sur TSLA").</p>
+                    <div class="flex flex-col sm:flex-row gap-4">
+                        <input type="text" id="ia-prompt" class="flex-grow bg-gray-700 text-white border border-gray-600 rounded-lg py-2 px-4 focus:outline-none focus:ring-2 focus:ring-cyan-500" placeholder="Ex: Dernières nouvelles sur le Bitcoin...">
+                        <button id="ia-submit" class="bg-cyan-600 hover:bg-cyan-700 text-white font-bold py-2 px-6 rounded-lg transition duration-300 flex items-center justify-center">
+                            <span class="mr-2">Analyser</span>
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </div>
+                    <div id="ia-loader" class="hidden mt-6 flex justify-center">
+                        <div class="loader"></div>
+                    </div>
+                    <div id="ia-response" class="mt-6 p-4 bg-gray-900 rounded-lg whitespace-pre-wrap"></div>
+                </div>
+            </div>
+
+            <div id="checklist" class="content-section hidden">
+                <h2 class="text-3xl font-bold mb-6 text-white">Check-list d'Entrée en Position</h2>
+                <div class="bg-gray-800 p-6 rounded-lg shadow-lg">
+                    <div class="space-y-4">
+                        <label class="flex items-center cursor-pointer">
+                            <input type="checkbox" class="form-checkbox h-5 w-5 text-cyan-500 bg-gray-700 border-gray-600 rounded focus:ring-cyan-500">
+                            <span class="ml-3 text-lg">Prix au-dessus de la Moyenne Mobile 150</span>
+                        </label>
+                        <label class="flex items-center cursor-pointer">
+                            <input type="checkbox" class="form-checkbox h-5 w-5 text-cyan-500 bg-gray-700 border-gray-600 rounded focus:ring-cyan-500">
+                            <span class="ml-3 text-lg">Clôture d’une bougie M30 au-dessus de la zone de résistance</span>
+                        </label>
+                        <label class="flex items-center cursor-pointer">
+                            <input type="checkbox" class="form-checkbox h-5 w-5 text-cyan-500 bg-gray-700 border-gray-600 rounded focus:ring-cyan-500">
+                            <span class="ml-3 text-lg">Stop Loss placé sous la MM100 et sous la zone de résistance</span>
+                        </label>
+                         <label class="flex items-center cursor-pointer">
+                            <input type="checkbox" class="form-checkbox h-5 w-5 text-cyan-500 bg-gray-700 border-gray-600 rounded focus:ring-cyan-500">
+                            <span class="ml-3 text-lg">Risque par trade < 2% maximum</span>
+                        </label>
+                        <label class="flex items-center cursor-pointer">
+                            <input type="checkbox" class="form-checkbox h-5 w-5 text-cyan-500 bg-gray-700 border-gray-600 rounded focus:ring-cyan-500">
+                            <span class="ml-3 text-lg">Vérification du momentum (fort/faible)</span>
+                        </label>
+                    </div>
+                    <button id="reset-checklist" class="mt-6 bg-cyan-600 hover:bg-cyan-700 text-white font-bold py-2 px-4 rounded-lg transition duration-300">
+                        Réinitialiser
+                    </button>
+                </div>
+            </div>
+
+            <div id="actifs" class="content-section hidden">
+                <h2 class="text-3xl font-bold mb-6 text-white">Données des Actifs</h2>
+                <div class="bg-gray-800 p-4 rounded-lg shadow-lg">
+                    <div id="month-filters" class="flex flex-wrap gap-2 mb-4">
+                        <!-- Month filter buttons will be injected here -->
+                    </div>
+                    <div class="flex items-center mb-4">
+                        <i class="fas fa-search text-gray-400 mr-3"></i>
+                        <input type="text" id="searchInput" placeholder="Rechercher un actif..." class="w-full bg-gray-700 text-white border border-gray-600 rounded-lg py-2 px-4 focus:outline-none focus:ring-2 focus:ring-cyan-500">
+                    </div>
+                    <div class="table-container">
+                        <table class="min-w-full text-left">
+                            <thead class="bg-gray-700 sticky top-0">
+                                <tr>
+                                    <th class="p-4 font-semibold cursor-pointer" data-sort="Actif">Actif <i class="fas fa-sort ml-2"></i></th>
+                                    <th class="p-4 font-semibold cursor-pointer" data-sort="TF">TF <i class="fas fa-sort ml-2"></i></th>
+                                    <th class="p-4 font-semibold cursor-pointer" data-sort="Rebond">Rebonds <i class="fas fa-sort ml-2"></i></th>
+                                    <th class="p-4 font-semibold cursor-pointer" data-sort="Risk Reward">RR <i class="fas fa-sort ml-2"></i></th>
+                                    <th class="p-4 font-semibold cursor-pointer" data-sort="Break Even">BE <i class="fas fa-sort ml-2"></i></th>
+                                    <th class="p-4 font-semibold">Jours Actifs</th>
+                                    <th class="p-4 font-semibold">Mois Inactifs</th>
+                                    <th class="p-4 font-semibold cursor-pointer" data-sort="Win Rate">Win Rate <i class="fas fa-sort ml-2"></i></th>
+                                    <th class="p-4 font-semibold cursor-pointer" data-sort="Drawdown">Drawdown <i class="fas fa-sort ml-2"></i></th>
+                                </tr>
+                            </thead>
+                            <tbody id="assetTableBody" class="divide-y divide-gray-700"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div id="principes" class="content-section hidden">
+                <h2 class="text-3xl font-bold mb-6 text-white">Règles & Principes</h2>
+                <div class="bg-gray-800 p-6 rounded-lg shadow-lg">
+                    <h3 class="text-2xl font-bold text-cyan-400 mb-4">Les 6 Piliers du Trader</h3>
+                    <div class="space-y-4">
+                        <details class="p-4 bg-gray-700 rounded-lg cursor-pointer">
+                            <summary class="font-semibold text-lg">1. La Discipline</summary>
+                            <p class="mt-2 text-gray-300">La capacité à se donner des règles et à s'y tenir de manière rigoureuse. C'est le garde-fou qui empêche de retomber dans la pulsion.</p>
+                        </details>
+                        <details class="p-4 bg-gray-700 rounded-lg cursor-pointer">
+                            <summary class="font-semibold text-lg">2. La Régularité</summary>
+                            <p class="mt-2 text-gray-300">L'application répétée d'une action. La régularité transforme la discipline en une habitude et cette habitude en une stabilité.</p>
+                        </details>
+                         <details class="p-4 bg-gray-700 rounded-lg cursor-pointer">
+                            <summary class="font-semibold text-lg">3. Les Probabilités</summary>
+                            <p class="mt-2 text-gray-300">Comprendre qu'il n'y a pas de certitude, mais un avantage statistique qui se manifeste sur une série de transactions.</p>
+                        </details>
+                         <details class="p-4 bg-gray-700 rounded-lg cursor-pointer">
+                            <summary class="font-semibold text-lg">4. Les Émotions</summary>
+                            <p class="mt-2 text-gray-300">Le but n'est pas de les supprimer, mais de les comprendre pour ne pas appliquer les réflexes du passé aux situations présentes.</p>
+                        </details>
+                        <details class="p-4 bg-gray-700 rounded-lg cursor-pointer">
+                            <summary class="font-semibold text-lg">5. La Gestion du Risque</summary>
+                            <p class="mt-2 text-gray-300">Le processus d'identification, d'évaluation et de contrôle des pertes potentielles. Ce qui garantit la survie du capital.</p>
+                        </details>
+                        <details class="p-4 bg-gray-700 rounded-lg cursor-pointer">
+                            <summary class="font-semibold text-lg">6. La Patience</summary>
+                            <p class="mt-2 text-gray-300">La capacité à attendre la bonne configuration sans forcer les événements. Ne pas trader est parfois la meilleure décision.</p>
+                        </details>
+                    </div>
+                </div>
+            </div>
+
+             <div id="notes" class="content-section hidden">
+                <h2 class="text-3xl font-bold mb-6 text-white">Notes Personnelles & Coach IA</h2>
+                <div class="bg-gray-800 p-6 rounded-lg shadow-lg">
+                    <textarea id="personalNotes" class="w-full h-64 bg-gray-700 text-white border border-gray-600 rounded-lg p-4 focus:outline-none focus:ring-2 focus:ring-cyan-500" placeholder="Écrivez vos pensées, analyses de trades, émotions ressenties..."></textarea>
+                    <div class="flex items-center gap-4 mt-4">
+                        <button id="saveNotes" class="bg-cyan-600 hover:bg-cyan-700 text-white font-bold py-2 px-4 rounded-lg transition duration-300">
+                            Enregistrer les notes
+                        </button>
+                         <button id="analyzeNotes" class="bg-amber-600 hover:bg-amber-700 text-white font-bold py-2 px-4 rounded-lg transition duration-300 flex items-center">
+                            <i class="fas fa-brain mr-2"></i> Analyser avec l'IA
+                        </button>
+                        <p id="saveStatus" class="text-sm text-green-400 opacity-0 transition-opacity">Notes enregistrées !</p>
+                    </div>
+
+                    <h3 class="text-2xl font-bold text-amber-400 mt-8 mb-4">Analyse du Coach IA</h3>
+                    <div id="notes-loader" class="hidden mt-6 flex justify-center">
+                        <div class="loader"></div>
+                    </div>
+                    <div id="notes-response" class="p-4 bg-gray-900 rounded-lg whitespace-pre-wrap"></div>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+<script>
+    // --- DATA FROM THE DOCUMENT ---
+    const assetData = [
+      {"Actif": "DAX", "TF": "M30", "Rebond": 3, "Risk Reward": 2, "Break Even": "NON", "Jours actifs": "Mar, Mer, Jeu", "Mois inactifs": "Jan, Juin, Août, Nov", "RR (20 ans)": "70,75%", "Win Rate": 49.65, "Drawdown": 4.58},
+      {"Actif": "NAS100USD", "TF": "M30", "Rebond": 2, "Risk Reward": 3, "Break Even": "BE1", "Jours actifs": "Lundi, Mardi, Jeudi, Vendredi", "Mois inactifs": "Fév, Mar, Avr, Mai, Aoû, Sep, Déc", "RR (20 ans)": "143,34%", "Win Rate": 27.76, "Drawdown": 7.10},
+      {"Actif": "US30USD", "TF": "M30", "Rebond": 2, "Risk Reward": 2, "Break Even": "BE1", "Jours actifs": "Lundi, Mardi, Jeudi, Vendredi", "Mois inactifs": "Fév, Mar, Mai, Aoû, Sep", "RR (20 ans)": "118,73%", "Win Rate": 35.32, "Drawdown": 9.32},
+      {"Actif": "EU50EUR", "TF": "M30", "Rebond": 3, "Risk Reward": 2.5, "Break Even": "NON", "Jours actifs": "Tous les jours", "Mois inactifs": "Tous les mois", "RR (20 ans)": "60,31%", "Win Rate": 35.90, "Drawdown": 6.28},
+      {"Actif": "JP225USD", "TF": "M30", "Rebond": 2, "Risk Reward": 2.5, "Break Even": "BE1", "Jours actifs": "Tous les jours", "Mois inactifs": "Jan", "RR (20 ans)": "199,41%", "Win Rate": 29.01, "Drawdown": 7.21},
+      {"Actif": "SPX500USD", "TF": "M30", "Rebond": 3, "Risk Reward": 3, "Break Even": "BE1", "Jours actifs": "Mardi, Jeudi, Vendredi", "Mois inactifs": "Mar, Aoû, Déc", "RR (20 ans)": "60,60%", "Win Rate": 34.67, "Drawdown": 6.26},
+      {"Actif": "EURJPY", "TF": "M30", "Rebond": 3, "Risk Reward": 2.5, "Break Even": "NON", "Jours actifs": "Tous les jours", "Mois inactifs": "Jan, Mar, Juil", "RR (20 ans)": "114,84%", "Win Rate": 38.87, "Drawdown": 8.64},
+      {"Actif": "AUDJPY", "TF": "M30", "Rebond": 2, "Risk Reward": 3, "Break Even": "NON", "Jours actifs": "Tous les jours", "Mois inactifs": "Jan, Mar, Mai, Juin, Juil, Aoû, Sep", "RR (20 ans)": "121,41%", "Win Rate": 32.98, "Drawdown": 8.38},
+      {"Actif": "XAUUSD", "TF": "M30", "Rebond": 2, "Risk Reward": 3, "Break Even": "NON", "Jours actifs": "Tous les jours", "Mois inactifs": "Fév, Mai, Juin, Sep, Oct", "RR (20 ans)": "205,99%", "Win Rate": 36.24, "Drawdown": 7.40},
+      {"Actif": "BTCUSD", "TF": "M30", "Rebond": 2, "Risk Reward": 3, "Break Even": "NON", "Jours actifs": "Tous les jours", "Mois inactifs": "Mar, Juin", "RR (20 ans)": "202,35%", "Win Rate": 39.08, "Drawdown": 5.63},
+      {"Actif": "GBPJPY", "TF": "M30", "Rebond": 3, "Risk Reward": 3, "Break Even": "NON", "Jours actifs": "Lundi, Mardi, Mercredi", "Mois inactifs": "Juin, Juil, Aoû, Sep, Oct", "RR (20 ans)": "128,91%", "Win Rate": 45.28, "Drawdown": 4.26},
+      {"Actif": "USDJPY", "TF": "M30", "Rebond": 2, "Risk Reward": 2, "Break Even": "BE1", "Jours actifs": "Lundi, Mardi, Mercredi, Jeudi", "Mois inactifs": "Jan, Avr, Mai, Juil", "RR (20 ans)": "172,67%", "Win Rate": 36.00, "Drawdown": 4.86},
+      {"Actif": "CADJPY", "TF": "M30", "Rebond": 3, "Risk Reward": 3, "Break Even": "NON", "Jours actifs": "Mardi, Jeudi, Vendredi", "Mois inactifs": "Juin, Juil, Aoû, Sep, Nov", "RR (20 ans)": "107,05%", "Win Rate": 43.45, "Drawdown": 3.94},
+      {"Actif": "AAPL", "TF": "M30", "Rebond": 3, "Risk Reward": 3, "Break Even": "N", "Jours actifs": "Tous les jours", "Mois inactifs": "Jan,Mai,Jul,Août,Sep", "RR (20 ans)": "181,34%", "Win Rate": 42.39, "Drawdown": 6.72},
+      {"Actif": "NVDA", "TF": "M30", "Rebond": 2, "Risk Reward": 1, "Break Even": "N", "Jours actifs": "Lun,Mar,Mer,Ven", "Mois inactifs": "Mai,Jul,Août,Nov,Dec", "RR (20 ans)": "80,05%", "Win Rate": 64.32, "Drawdown": 3.96},
+      {"Actif": "MSFT", "TF": "M30", "Rebond": 2, "Risk Reward": 2, "Break Even": "N", "Jours actifs": "Tous les jours", "Mois inactifs": "Mar,Avr,Mai,Sep", "RR (20 ans)": "85,52%", "Win Rate": 38.73, "Drawdown": 8.83},
+      {"Actif": "BAC", "TF": "M30", "Rebond": 2, "Risk Reward": 2, "Break Even": "N", "Jours actifs": "Lun,Mar,Mer", "Mois inactifs": "Avr,Juin,Sep", "RR (20 ans)": "68,60%", "Win Rate": 37.31, "Drawdown": 8.03},
+      {"Actif": "AMZN", "TF": "M30", "Rebond": 2, "Risk Reward": 5, "Break Even": "N", "Jours actifs": "Lun,Mar,Ven", "Mois inactifs": "Fev,Mar,Nov", "RR (20 ans)": "142,02%", "Win Rate": 34.59, "Drawdown": 6.86},
+      {"Actif": "NFLX", "TF": "M30", "Rebond": 2, "Risk Reward": 2.5, "Break Even": "N", "Jours actifs": "Lun,Mer,Jeu,Ven", "Mois inactifs": "Jan,Fev,Sep,Dec", "RR (20 ans)": "106,93%", "Win Rate": 43.56, "Drawdown": 6.11},
+      {"Actif": "SPGI", "TF": "M30", "Rebond": 2, "Risk Reward": 3, "Break Even": "N", "Jours actifs": "Lun,Mar,Ven", "Mois inactifs": "Jul,Août,Nov,Dec", "RR (20 ans)": "86,29%", "Win Rate": 42.86, "Drawdown": 6.11},
+      {"Actif": "TSLA", "TF": "M30", "Rebond": 2, "Risk Reward": 1.5, "Break Even": "N", "Jours actifs": "Tous les jours", "Mois inactifs": "Fev,Mar,Juil,Nov,Dec", "RR (20 ans)": "59,01%", "Win Rate": 60.71, "Drawdown": 4.09},
+      {"Actif": "RACE", "TF": "M30", "Rebond": 3, "Risk Reward": 1, "Break Even": "Y", "Jours actifs": "Tous les jours", "Mois inactifs": "Tous les mois", "RR (20 ans)": "50,18%", "Win Rate": 36.89, "Drawdown": 5.94},
+      {"Actif": "MC", "TF": "M30", "Rebond": 2, "Risk Reward": 5, "Break Even": "Y", "Jours actifs": "Lun,Mar", "Mois inactifs": "Fev", "RR (20 ans)": "81,98%", "Win Rate": 28.57, "Drawdown": 8.72},
+      {"Actif": "AEP", "TF": "M30", "Rebond": 2, "Risk Reward": 2.5, "Break Even": "N", "Jours actifs": "Mer,Ven", "Mois inactifs": "Avr,Mai,Juin,Août", "RR (20 ans)": "76,42%", "Win Rate": 42.86, "Drawdown": 6.15},
+      {"Actif": "AMAT", "TF": "M30", "Rebond": 2, "Risk Reward": 3, "Break Even": "N", "Jours actifs": "Mar,Jeu,Ven", "Mois inactifs": "Mar,Avr,Juin", "RR (20 ans)": "97,90%", "Win Rate": 42.75, "Drawdown": 5.67},
+      {"Actif": "AMD", "TF": "M30", "Rebond": 2, "Risk Reward": 1.5, "Break Even": "N", "Jours actifs": "Lun,Mar,Ven", "Mois inactifs": "Avr,Mai", "RR (20 ans)": "100,57%", "Win Rate": 56.96, "Drawdown": 4.06},
+      {"Actif": "AMGN", "TF": "M30", "Rebond": 2, "Risk Reward": 4, "Break Even": "N", "Jours actifs": "Mar,Ven", "Mois inactifs": "Fev,Mar,Sep", "RR (20 ans)": "85,82%", "Win Rate": 35.24, "Drawdown": 7.48},
+      {"Actif": "NOC", "TF": "M30", "Rebond": 2, "Risk Reward": 1.5, "Break Even": "N", "Jours actifs": "Lun,Mar,Ven", "Mois inactifs": "Mai", "RR (20 ans)": "108,07%", "Win Rate": 56.20, "Drawdown": 4.15},
+      {"Actif": "BKNG", "TF": "M30", "Rebond": 2, "Risk Reward": 1, "Break Even": "Y", "Jours actifs": "Lun,Mar,Jeu", "Mois inactifs": "Juin,Dec", "RR (20 ans)": "107,37%", "Win Rate": 45.59, "Drawdown": 6.27},
+      {"Actif": "CHTR", "TF": "M30", "Rebond": 2, "Risk Reward": 2.5, "Break Even": "N", "Jours actifs": "Tous les jours", "Mois inactifs": "Tous les mois", "RR (20 ans)": "52,28%", "Win Rate": 42, "Drawdown": 7.80},
+      {"Actif": "LRCX", "TF": "M30", "Rebond": 2, "Risk Reward": 4, "Break Even": "N", "Jours actifs": "Mar,Mer,Ven", "Mois inactifs": "Avr,Juin,Juil,Août", "RR (20 ans)": "78,15%", "Win Rate": 32.31, "Drawdown": 7.54},
+      {"Actif": "COST", "TF": "M30", "Rebond": 2, "Risk Reward": 3, "Break Even": "N", "Jours actifs": "Mar,Jeu,Ven", "Mois inactifs": "Mar,Mai,Jul,Sep,Dec", "RR (20 ans)": "80,80%", "Win Rate": 32.85, "Drawdown": 10.73},
+      {"Actif": "NOW", "TF": "M30", "Rebond": 2, "Risk Reward": 1, "Break Even": "Y", "Jours actifs": "Tous les jours", "Mois inactifs": "Mar,Sep", "RR (20 ans)": "75,79%", "Win Rate": 43.51, "Drawdown": 4},
+      {"Actif": "ISRG", "TF": "M30", "Rebond": 2, "Risk Reward": 4, "Break Even": "Y", "Jours actifs": "Lun,Mar,Jeu", "Mois inactifs": "Sep,Oct", "RR (20 ans)": "91,92%", "Win Rate": 38.46, "Drawdown": 4.55},
+      {"Actif": "QCOM", "TF": "M30", "Rebond": 2, "Risk Reward": 3, "Break Even": "N", "Jours actifs": "Mar,Mer,Ven", "Mois inactifs": "Jan,Mar,Juin,Nov,Dec", "RR (20 ans)": "55,94%", "Win Rate": 34.85, "Drawdown": 4.93},
+      {"Actif": "MU", "TF": "M30", "Rebond": 2, "Risk Reward": 2.5, "Break Even": "N", "Jours actifs": "Mar,Mer,Ven", "Mois inactifs": "Fev,Juil,Sep,Oct", "RR (20 ans)": "71,21%", "Win Rate": 41.79, "Drawdown": 4.67},
+      {"Actif": "TMUS", "TF": "M30", "Rebond": 2, "Risk Reward": 4, "Break Even": "N", "Jours actifs": "Mer,Ven", "Mois inactifs": "Avr,Août,Dec", "RR (20 ans)": "67,27%", "Win Rate": 32.04, "Drawdown": 5.59},
+      {"Actif": "ABBV", "TF": "M30", "Rebond": 2, "Risk Reward": 4, "Break Even": "N", "Jours actifs": "Lun,Mar,Jeu", "Mois inactifs": "Août", "RR (20 ans)": "57,76%", "Win Rate": 38.18, "Drawdown": 6.19},
+      {"Actif": "ACN", "TF": "M30", "Rebond": 2, "Risk Reward": 3, "Break Even": "N", "Jours actifs": "Mar,Mer", "Mois inactifs": "Fev,Mar,Avr,Oct", "RR (20 ans)": "69,28%", "Win Rate": 37.14, "Drawdown": 6.71},
+      {"Actif": "AVB", "TF": "M30", "Rebond": 2, "Risk Reward": 2, "Break Even": "N", "Jours actifs": "Lun,Mar,Jeu", "Mois inactifs": "Fev,Mar,Mai,Juil,Nov,Dec", "RR (20 ans)": "70,92%", "Win Rate": 71.34, "Drawdown": 4.03},
+      {"Actif": "BLK", "TF": "M30", "Rebond": 2, "Risk Reward": 5, "Break Even": "Y", "Jours actifs": "Lun,Mar,Jeu,Ven", "Mois inactifs": "Jan,Fev,Mar,Avr,Juin,Juil,Dec", "RR (20 ans)": "91,41%", "Win Rate": 47.22, "Drawdown": 7.87},
+      {"Actif": "BRK.B", "TF": "M30", "Rebond": 2, "Risk Reward": 2, "Break Even": "N", "Jours actifs": "Lun,Mar,Ven", "Mois inactifs": "Mai,Juin,Juil,Août", "RR (20 ans)": "96,60%", "Win Rate": 51.27, "Drawdown": 6.71},
+      {"Actif": "BX", "TF": "M30", "Rebond": 2, "Risk Reward": 3, "Break Even": "N", "Jours actifs": "Mar,Mer,Jeu", "Mois inactifs": "Fev,Mai,Juin,Août", "RR (20 ans)": "84,27%", "Win Rate": 36.23, "Drawdown": 3.74},
+      {"Actif": "CAT", "TF": "M30", "Rebond": 2, "Risk Reward": 5, "Break Even": "Y", "Jours actifs": "Mar,Mer,Ven", "Mois inactifs": "Fev,Mar,Mai,Juin,Juil,Dec", "RR (20 ans)": "96,61%", "Win Rate": 46.07, "Drawdown": 5.25},
+      {"Actif": "CRM", "TF": "M30", "Rebond": 2, "Risk Reward": 3, "Break Even": "N", "Jours actifs": "Lun,Mar,Mer", "Mois inactifs": "Fev,Avr,Juillet,Nov", "RR (20 ans)": "89,41%", "Win Rate": 40.48, "Drawdown": 5.70},
+      {"Actif": "ECL", "TF": "M30", "Rebond": 2, "Risk Reward": 5, "Break Even": "N", "Jours actifs": "Mar, Mer, Jeu", "Mois inactifs": "Fev, Juil, Oct", "RR (20 ans)": "97,04%", "Win Rate": 29.01, "Drawdown": 7.38},
+      {"Actif": "ELV", "TF": "M30", "Rebond": 2, "Risk Reward": 3, "Break Even": "Y", "Jours actifs": "Lun,Mar", "Mois inactifs": "Tous les mois", "RR (20 ans)": "64,34%", "Win Rate": 50.82, "Drawdown": 3.84},
+      {"Actif": "DHR", "TF": "M30", "Rebond": 2, "Risk Reward": 3, "Break Even": "N", "Jours actifs": "Lun,Mar,Jeu", "Mois inactifs": "Jan,Mai,Juil,Août,Dec", "RR (20 ans)": "79,19%", "Win Rate": 41.35, "Drawdown": 4.18},
+      {"Actif": "GS", "TF": "M30", "Rebond": 2, "Risk Reward": 3, "Break Even": "N", "Jours actifs": "Mar,Mer,Jeu", "Mois inactifs": "Jan,Fev,Mar,Jul", "RR (20 ans)": "92,62%", "Win Rate": 40.52, "Drawdown": 4.71}
+    ];
+
+    // --- APPLICATION LOGIC ---
+    document.addEventListener('DOMContentLoaded', () => {
+        const tableBody = document.getElementById('assetTableBody');
+        const searchInput = document.getElementById('searchInput');
+        const headers = document.querySelectorAll('#actifs thead th');
+        const navLinks = document.querySelectorAll('.nav-link');
+        const contentSections = document.querySelectorAll('.content-section');
+        const resetChecklistBtn = document.getElementById('reset-checklist');
+        const personalNotes = document.getElementById('personalNotes');
+        const saveNotesBtn = document.getElementById('saveNotes');
+        const saveStatus = document.getElementById('saveStatus');
+        const sidebar = document.getElementById('sidebar');
+        const mainContent = document.getElementById('main-content');
+        const openSidebarBtn = document.getElementById('open-sidebar');
+        const closeSidebarBtn = document.getElementById('close-sidebar');
+
+        // Gemini API Elements
+        const iaPromptInput = document.getElementById('ia-prompt');
+        const iaSubmitBtn = document.getElementById('ia-submit');
+        const iaResponseContainer = document.getElementById('ia-response');
+        const iaLoader = document.getElementById('ia-loader');
+        const analyzeNotesBtn = document.getElementById('analyzeNotes');
+        const notesResponseContainer = document.getElementById('notes-response');
+        const notesLoader = document.getElementById('notes-loader');
+        
+        // Month Filter Elements
+        const monthFiltersContainer = document.getElementById('month-filters');
+        const frenchMonths = ["Jan", "Fév", "Mar", "Avr", "Mai", "Juin", "Juil", "Aoû", "Sep", "Oct", "Nov", "Déc"];
+        let activeMonth = 'all';
+
+        let currentSort = { key: 'Actif', order: 'asc' };
+        
+        // --- Gemini API Call Function ---
+        const callGeminiAPI = async (userQuery, systemPrompt, useGrounding, loaderElement, responseElement) => {
+            loaderElement.style.display = 'flex';
+            responseElement.textContent = '';
+            
+            const apiKey = ""; 
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
+
+            const payload = {
+                contents: [{ parts: [{ text: userQuery }] }],
+                systemInstruction: { parts: [{ text: systemPrompt }] },
+            };
+
+            if (useGrounding) {
+                payload.tools = [{ "google_search": {} }];
+            }
+            
+            try {
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                if (!response.ok) {
+                    throw new Error(`API Error: ${response.statusText}`);
+                }
+
+                const result = await response.json();
+                const candidate = result.candidates?.[0];
+
+                if (candidate && candidate.content?.parts?.[0]?.text) {
+                    let text = candidate.content.parts[0].text;
+                    let sourcesHtml = '';
+                    const groundingMetadata = candidate.groundingMetadata;
+
+                    if (groundingMetadata && groundingMetadata.groundingAttributions) {
+                        const sources = groundingMetadata.groundingAttributions
+                            .map(attr => ({ uri: attr.web?.uri, title: attr.web?.title }))
+                            .filter(source => source.uri && source.title);
+                        
+                        if(sources.length > 0) {
+                            sourcesHtml = '<h4 class="font-bold mt-4 mb-2 text-gray-400">Sources:</h4><ul class="list-disc list-inside text-sm">';
+                            sources.forEach(s => {
+                                sourcesHtml += `<li><a href="${s.uri}" target="_blank" class="text-cyan-400 hover:underline">${s.title}</a></li>`;
+                            });
+                            sourcesHtml += '</ul>';
+                        }
+                    }
+                    responseElement.innerHTML = text + sourcesHtml;
+                } else {
+                    responseElement.textContent = "Désolé, la réponse n'a pas pu être générée. Veuillez réessayer.";
+                }
+
+            } catch (error) {
+                console.error("Gemini API call failed:", error);
+                responseElement.textContent = "Une erreur est survenue lors de la communication avec l'IA. Vérifiez la console pour plus de détails.";
+            } finally {
+                loaderElement.style.display = 'none';
+            }
+        };
+
+
+        const renderTable = (data) => {
+            tableBody.innerHTML = '';
+            data.forEach(asset => {
+                const winRateColor = asset['Win Rate'] >= 45 ? 'text-green-400' : asset['Win Rate'] >= 35 ? 'text-yellow-400' : 'text-red-400';
+                const drawdownColor = asset['Drawdown'] <= 5 ? 'text-green-400' : asset['Drawdown'] <= 8 ? 'text-yellow-400' : 'text-red-400';
+                const beColor = asset['Break Even'].toUpperCase() === 'NON' || asset['Break Even'].toUpperCase() === 'N' ? 'text-red-400' : 'text-green-400';
+                
+                const row = `<tr class="hover:bg-gray-700/50">
+                        <td class="p-4 font-medium text-white">${asset.Actif}</td>
+                        <td class="p-4">${asset.TF}</td>
+                        <td class="p-4">${asset.Rebond}</td>
+                        <td class="p-4">${asset['Risk Reward']}</td>
+                        <td class="p-4 font-semibold ${beColor}">${asset['Break Even']}</td>
+                        <td class="p-4 text-sm text-gray-400">${asset['Jours actifs']}</td>
+                        <td class="p-4 text-sm text-gray-400">${asset['Mois inactifs']}</td>
+                        <td class="p-4 font-semibold ${winRateColor}">${asset['Win Rate']}%</td>
+                        <td class="p-4 font-semibold ${drawdownColor}">${asset.Drawdown}%</td>
+                    </tr>`;
+                tableBody.innerHTML += row;
+            });
+        };
+
+        const applyFiltersAndSort = () => {
+            let filteredData = [...assetData];
+
+            // 1. Month Filter
+            if (activeMonth !== 'all') {
+                const monthAbbr = frenchMonths[activeMonth - 1];
+                 filteredData = filteredData.filter(asset => {
+                    const inactiveMonths = asset['Mois inactifs'];
+                    if (inactiveMonths.toLowerCase() === 'tous les mois') return true; 
+                    return !inactiveMonths.includes(monthAbbr);
+                });
+            }
+
+            // 2. Search Filter
+            const searchTerm = searchInput.value.toLowerCase();
+            if (searchTerm) {
+                filteredData = filteredData.filter(asset => 
+                    asset.Actif.toLowerCase().includes(searchTerm)
+                );
+            }
+
+            // 3. Sorting
+            filteredData.sort((a, b) => {
+                let valA = a[currentSort.key]; 
+                let valB = b[currentSort.key];
+                if (typeof valA === 'string') { valA = valA.toLowerCase(); valB = valB.toLowerCase(); }
+                if (valA < valB) return currentSort.order === 'asc' ? -1 : 1;
+                if (valA > valB) return currentSort.order === 'asc' ? 1 : -1;
+                return 0;
+            });
+
+            renderTable(filteredData);
+            updateSortIcons();
+        };
+
+        const updateSortIcons = () => {
+            headers.forEach(h => {
+                const icon = h.querySelector('i');
+                if (icon) {
+                    icon.className = 'fas fa-sort ml-2';
+                    if (h.dataset.sort === currentSort.key) {
+                        icon.className = currentSort.order === 'asc' ? 'fas fa-sort-up ml-2' : 'fas fa-sort-down ml-2';
+                    }
+                }
+            });
+        };
+        
+        headers.forEach(header => {
+            if (header.dataset.sort) {
+                header.addEventListener('click', () => {
+                    const key = header.dataset.sort;
+                    const order = (currentSort.key === key && currentSort.order === 'asc') ? 'desc' : 'asc';
+                    currentSort = { key, order };
+                    applyFiltersAndSort();
+                });
+            }
+        });
+
+        searchInput.addEventListener('input', applyFiltersAndSort);
+
+        // --- Month Filter Logic ---
+        const createMonthFilters = () => {
+            let buttonsHTML = `<button class="month-filter-btn px-3 py-1 text-sm rounded-md bg-gray-700 hover:bg-gray-600 active" data-month="all">Tous</button>`;
+            frenchMonths.forEach((month, index) => {
+                 buttonsHTML += `<button class="month-filter-btn px-3 py-1 text-sm rounded-md bg-gray-700 hover:bg-gray-600" data-month="${index + 1}">${month}</button>`;
+            });
+            monthFiltersContainer.innerHTML = buttonsHTML;
+
+            document.querySelectorAll('.month-filter-btn').forEach(button => {
+                button.addEventListener('click', () => {
+                    document.querySelector('.month-filter-btn.active').classList.remove('active');
+                    button.classList.add('active');
+                    activeMonth = button.dataset.month;
+                    applyFiltersAndSort();
+                });
+            });
+        };
+
+        // --- Navigation Logic ---
+        const switchView = (hash) => {
+            contentSections.forEach(section => section.classList.add('hidden'));
+            navLinks.forEach(link => link.classList.remove('active-nav'));
+            const activeSection = document.querySelector(hash);
+            const activeLink = document.querySelector(`.nav-link[href="${hash}"]`);
+            if (activeSection) activeSection.classList.remove('hidden');
+            if (activeLink) activeLink.classList.add('active-nav');
+        };
+
+        navLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const hash = link.getAttribute('href');
+                window.location.hash = hash;
+                if(window.innerWidth < 1024) {
+                    sidebar.classList.add('sidebar-hidden');
+                }
+            });
+        });
+        
+        window.addEventListener('hashchange', () => switchView(window.location.hash || '#dashboard'));
+        
+        // --- Checklist Logic ---
+        resetChecklistBtn.addEventListener('click', () => {
+            document.querySelectorAll('#checklist input[type="checkbox"]').forEach(cb => cb.checked = false);
+        });
+
+        // --- Notes Logic ---
+        saveNotesBtn.addEventListener('click', () => {
+            localStorage.setItem('traderNotes', personalNotes.value);
+            saveStatus.classList.remove('opacity-0');
+            setTimeout(() => { saveStatus.classList.add('opacity-0'); }, 2000);
+        });
+
+        const loadNotes = () => {
+            const savedNotes = localStorage.getItem('traderNotes');
+            if (savedNotes) { personalNotes.value = savedNotes; }
+        };
+
+        // --- AI Features Logic ---
+        iaSubmitBtn.addEventListener('click', () => {
+            const prompt = iaPromptInput.value;
+            if (!prompt) return;
+            const systemPrompt = "Vous êtes un assistant analyste financier. Votre rôle est de fournir des résumés concis et impartiaux des dernières nouvelles et analyses du marché pour un actif ou un sujet donné. Répondez en français. Structurez votre réponse de manière claire avec des points clés. Si vous utilisez des informations du web, vous devez citer vos sources.";
+            callGeminiAPI(prompt, systemPrompt, true, iaLoader, iaResponseContainer);
+        });
+
+        analyzeNotesBtn.addEventListener('click', () => {
+            const notes = personalNotes.value;
+            if (!notes) {
+                notesResponseContainer.textContent = "Veuillez d'abord écrire quelques notes dans votre journal.";
+                return;
+            }
+            const systemPrompt = "Vous êtes un coach en psychologie du trading. Votre analyse est basée sur les principes de discipline, régularité, patience, probabilité, contrôle émotionnel et gestion du risque. Analysez les entrées de journal de trading suivantes. Identifiez les schémas émotionnels récurrents (peur, avidité, impatience, trading de vengeance) ou les manquements aux règles du trader. Fournissez des commentaires constructifs et encourageants en français pour aider le trader à mieux s'aligner sur ses principes. Ne donnez pas de conseils financiers. Concentrez-vous uniquement sur les aspects psychologiques et disciplinaires.";
+            callGeminiAPI(notes, systemPrompt, false, notesLoader, notesResponseContainer);
+        });
+
+        // --- Sidebar Toggle for Mobile ---
+        openSidebarBtn.addEventListener('click', () => sidebar.classList.remove('sidebar-hidden'));
+        closeSidebarBtn.addEventListener('click', () => sidebar.classList.add('sidebar-hidden'));
+        
+        // --- Initial Load ---
+        createMonthFilters();
+        applyFiltersAndSort();
+        loadNotes();
+        switchView(window.location.hash || '#dashboard');
+    });
+</script>
+</body>
+</html>
+
